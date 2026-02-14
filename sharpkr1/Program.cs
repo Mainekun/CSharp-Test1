@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace sharpkr1
 {
@@ -14,6 +15,13 @@ namespace sharpkr1
 
         public TestCollections(int amount, GenerateElement<TKey, TValue> genFunction)
         {
+			Console.WriteLine($"\u001b[0;96mCreating collections capacity of {amount}\n" +
+				$"Dictionary<{typeof(TKey).Name}, {typeof(TValue).Name}>\n" +
+				$"Dictionary<string, {typeof(TValue).Name}>\n" +
+				$"List<{typeof(TKey).Name}>\n" +
+				$"List<{typeof(TValue).Name}>\n" +
+				$"Coresponding GenerateElementDelegate<{typeof(TKey).Name}, {typeof(TValue).Name}>" +
+				$"\u001b[0m");
             _generateElementFunction = genFunction;
             _keydict = new Dictionary<TKey, TValue>(amount);
             _keys = new List<TKey>(amount);
@@ -21,7 +29,39 @@ namespace sharpkr1
             _stringdict = new Dictionary<string, TValue>(amount);
         }
 
+		public void TestContains()
+		{
+			_keys.Clear();
+			_values.Clear();
+
+			for (var i = 0; i < _keys.Capacity; i++)
+			{
+				_keys[i] = _generateElementFunction(i).Key;
+				_values[i] = _generateElementFunction(i).Value;
+			}
+
+			Console.WriteLine($"First element search");
+
+			Stopwatch stopwatch = new Stopwatch();
+			stopwatch.Start();
+
+			_keys.Contains(_generateElementFunction(0).Key);
+
+			stopwatch.Stop();
+		}
+
+		public void TestContainsKey()
+		{
+
+		}
+
+		public void TestContainsValue()
+		{
+
+		}
     }
+
+	
 
     class Person
     {
@@ -208,34 +248,44 @@ namespace sharpkr1
             return new KeyValuePair<TKey, TValue>();
         }
 
-        static void Main(string[] args)
+		static void Main(string[] args)
         {
-            int itemsAmount = 0;
+			var testCollections = InitializeTestCollections<string, string>();
 
-            while (itemsAmount <= 0)
-            {
-                Console.Write("\u001b[s\u001b[3;33;40mEnter amount of items: ");
-                bool parseResult = int.TryParse(Console.ReadLine(), out itemsAmount);
-                
-                if (parseResult == false)
-                {
-                    Console.WriteLine("\u001b[u\u001b[3;31;40mMust be integer!                               ");
-                    itemsAmount = 0;
-                }
-                else
-                {
-                    if (itemsAmount > 0)
-                    {
-                        Console.WriteLine($"\u001b[u\u001b[5;32;40mAccepted: {itemsAmount}\u001b[0;0;0m                               ");
-                    }
-                    else
-                    {
-                        Console.WriteLine($"\u001b[u\u001b[3;31;40mDenied {itemsAmount}. Must be positive!                              ");
-                    }
-                }
-            }
-
-
+			
         }
-    }
+
+		static TestCollections<TKey, TValue> InitializeTestCollections<TKey, TValue>()
+		{
+			int itemsAmount = 0;
+
+			while (itemsAmount <= 0)
+			{
+				Console.Write("\u001b[s\u001b[3;33;40mEnter amount of items: ");
+				bool parseResult = int.TryParse(Console.ReadLine(), out itemsAmount);
+
+				if (parseResult == false)
+				{
+					Console.WriteLine("\u001b[u\u001b[3;31;40mMust be integer!                               ");
+					itemsAmount = 0;
+				}
+				else
+				{
+					if (itemsAmount > 0)
+					{
+						Console.WriteLine($"\u001b[u\u001b[5;32;40mAccepted: {itemsAmount}\u001b[0;0;0m                               ");
+					}
+					else
+					{
+						Console.WriteLine($"\u001b[u\u001b[3;31;40mDenied {itemsAmount}. Must be positive!                              ");
+					}
+				}
+			}
+
+			Thread.Sleep(2000);
+			Console.Write("\u001b[2J\u001b[H");
+
+			return new TestCollections<TKey, TValue>(itemsAmount, GenFunc<TKey, TValue>);
+		}
+	}
 }
