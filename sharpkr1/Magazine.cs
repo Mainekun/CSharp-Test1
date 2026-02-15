@@ -24,6 +24,11 @@ namespace sharpkr1
         {
             get
             {
+				if (_articles.Count == 0)
+				{
+					return 0; 
+				}	
+
                 double avg = 0.0;
                 foreach (Article article in _articles)
                 {
@@ -46,7 +51,7 @@ namespace sharpkr1
         {
             foreach (Article article in articles)
             {
-                _articles.Append(article);
+                _articles.Add(article);
             }
         }
 
@@ -55,15 +60,19 @@ namespace sharpkr1
 			string displayString =
 				$"=== magazine: {_magazineName}\n" +
 				$"frequncy: {_frequency.ToString()}\n" +
-				$"released: {_releaseDate.ToString()}\n" +
-				$"editors: "; 
+				$"released: {_releaseDate.ToString()}\n";
 
-			foreach (var editor in _editors)
+			if (_editors.Count != 0)
 			{
-				displayString += editor.ToString() + "\n";
+				displayString += $"editors: \n";
+
+				foreach (var editor in _editors)
+				{
+					displayString += editor.ToString() + "\n";
+				}
 			}
 
-				displayString += $"articles: \n";
+			displayString += $"articles: \n\n";
 
 			foreach (var article in _articles)
 			{
@@ -75,7 +84,7 @@ namespace sharpkr1
 
         virtual public String ToShortString()
         {
-            return $"===" +
+            return $"=== " +
                 $"magazine: {_magazineName}\n" +
                 $"frequncy: {_frequency.ToString()}\n" +
                 $"released: {_releaseDate.ToString()}\n" +
@@ -90,6 +99,7 @@ namespace sharpkr1
             this._releaseDate = releaseDate;
             this._circulation = circulation;
 			this._articles = new List<Article>();
+			this._editors = new List<Person>();
         }
 
         public Magazine()
@@ -99,11 +109,12 @@ namespace sharpkr1
             _releaseDate = new DateTime();
             _circulation = 0;
             _articles = new List<Article>();
+			_editors = new List<Person>();
 		}
 
 		public void SortByName()
 		{
-			_articles.Sort();
+			_articles.Sort((x, y) => x.CompareTo(y));
 		}
 
 		// TODO: i dont know it should work or not

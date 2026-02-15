@@ -20,12 +20,12 @@ namespace sharpkr1
 			Magazine 
 				mg1 = new Magazine(
 					"CHIP", 
-					new Frequency(0, 1, 0), 
+					new Frequency(0, 0, 1), 
 					new DateTime(2020, 2, 2), 
 					10000),
 				mg2 = new Magazine(
 					"人民日报", 
-					new Frequency(0,1,0), 
+					new Frequency(1,0,0), 
 					new DateTime(1950, 9, 1), 
 					1000000);
 
@@ -53,9 +53,9 @@ namespace sharpkr1
 					return 0; 
 				}
 
-				var target = _magazines.Values
+				Magazine target = _magazines.Values
 					.OrderBy(mg => mg.AverageRating)
-					.First();
+					.Last();
 
 				return target.AverageRating;
 
@@ -65,7 +65,7 @@ namespace sharpkr1
 		public IEnumerable<KeyValuePair<TKey, Magazine>> FrequencyGroup(Frequency value)
 		{
 			return _magazines
-				.Where(mg => mg.Value.Equals(value));
+				.Where(mg => mg.Value.Frequency.Equals(value));
 		}
 
 		public IEnumerable<IGrouping<Frequency, KeyValuePair<TKey, Magazine>>> GroupByFrequency
@@ -79,22 +79,23 @@ namespace sharpkr1
 
 		public override string ToString()
         {
-			string displayString = "=== MagazineCollection ===\n";
+			string displayString = "===== MagazineCollection =====\n";
 			foreach (var magazine in _magazines)
 			{
-				displayString += magazine.ToString() + "\n";
+				
+				displayString += $"====\nKey: {magazine.Key.ToString()}\n{magazine.Value.ToString()}\n";
 			}
-            return displayString;
+            return displayString += "=====";
         }
 
 		public string ToShortString()
 		{
-			string displayString = "=== MagazineCollection ===\n";
+			string displayString = "===== MagazineCollection =====\n";
 			foreach (var magazine in _magazines)
 			{
-				displayString += magazine.Value.ToShortString() + "\n";
+				displayString += $"====\nKey: {magazine.Key.ToString()}\n{magazine.Value.ToShortString()}\n";
 			}
-			return displayString;
+			return displayString += "=====";
 		}
 
 		

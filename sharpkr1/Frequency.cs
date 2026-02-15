@@ -1,4 +1,6 @@
-﻿namespace sharpkr1
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace sharpkr1
 {
     struct Frequency
     {
@@ -22,8 +24,18 @@
 
         public override string ToString()
         {
-            return $"{days} day(s), {weeks} week(s), {months} month(es)";
+            return $"{days} day(s), {weeks} week(s), {months} month(s)";
         }
 
+        public override bool Equals(object? obj)
+        {
+			if (obj == null) return false;
+			if (obj is Frequency)
+			{
+				var objCast = (Frequency)obj;
+				return days == objCast.days && weeks == objCast.weeks && months == objCast.months;
+			}
+			return false;
+        }
     }
 }

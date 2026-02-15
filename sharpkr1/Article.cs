@@ -36,7 +36,16 @@ namespace sharpkr1
 		/// <returns></returns>
         public int CompareTo(object? obj)
         {
-            return articleName.CompareTo(obj);
+			if (obj == null) 
+			{
+				throw new NullReferenceException("How am i supposed to compare null with string?");
+			}
+			if (obj is Article)
+			{
+				var objCast = (Article)obj;
+				return articleName.CompareTo(objCast.articleName);
+			}
+			throw new Exception("What is this? Apples? Bananas?");
         }
 
 		/// <summary>
