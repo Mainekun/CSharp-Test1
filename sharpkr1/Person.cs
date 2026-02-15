@@ -10,5 +10,10 @@
             firstName = f;
             lastName = s;
         }
+
+        public override string ToString()
+        {
+			return $"{firstName} {lastName}";
+        }
     }
 }

@@ -23,10 +23,10 @@ namespace sharpkr1
 
         public override string ToString()
         {
-            return $"===" +
-                $"article: {articleName} \n" +
-                $"author: {author.firstName} {author.lastName}\n" +
-                $"rating: {articleRating} \n";
+            return
+                $"# article: {articleName} \n" +
+                $"  author: {author.ToString()}\n" +
+                $"  rating: {articleRating} \n";
         }
 
 		/// <summary>
@@ -47,10 +47,10 @@ namespace sharpkr1
 		/// <returns></returns>
         public int Compare(Article? x, Article? y)
         {
-			//if (x == null && y == null)
-			//{
-			//	throw new ArgumentNullException("Comparing nulls");
-			//}
+			if (x == null || y == null)
+			{
+				throw new ArgumentNullException("Comparing nulls");
+			}
 			return String.Compare(x.author.firstName, y.author.firstName);
         }
     }
@@ -64,6 +64,10 @@ class ArticleRatingComparer : IComparer<Article>
 {
 	public int Compare(Article? x, Article? y)
 	{
+		if (x == null || y == null)
+		{
+			throw new ArgumentNullException("Comararing null values");
+		}
 		if (x.articleRating == y.articleRating)
 		{
 			return 0;

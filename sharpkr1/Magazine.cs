@@ -1,4 +1,6 @@
-﻿namespace sharpkr1
+﻿using System.ComponentModel;
+
+namespace sharpkr1
 {
     class Magazine
     {
@@ -50,11 +52,25 @@
 
         public override string ToString()
         {
-            return $"===" +
-                $"magazine: {_magazineName}\n" +
-                $"frequncy: {_frequency.ToString()}\n" +
-                $"released: {_releaseDate.ToString()}\n" +
-                $"articles: {string.Join("\n", String.Join("\n", _articles))}\n";
+			string displayString =
+				$"=== magazine: {_magazineName}\n" +
+				$"frequncy: {_frequency.ToString()}\n" +
+				$"released: {_releaseDate.ToString()}\n" +
+				$"editors: "; 
+
+			foreach (var editor in _editors)
+			{
+				displayString += editor.ToString() + "\n";
+			}
+
+				displayString += $"articles: \n";
+
+			foreach (var article in _articles)
+			{
+				displayString += article.ToString() + "\n";
+			}
+
+			return displayString;
         }
 
         virtual public String ToShortString()
@@ -63,8 +79,9 @@
                 $"magazine: {_magazineName}\n" +
                 $"frequncy: {_frequency.ToString()}\n" +
                 $"released: {_releaseDate.ToString()}\n" +
-                $"avg rating: {AverageRating} \n";
-        }
+				$"editors team size: {_editors.Count}\n" +
+				$"avg rating: {AverageRating}\n";
+		}
 
         public Magazine(string magazineName, Frequency frequency, DateTime releaseDate, int circulation)
         {

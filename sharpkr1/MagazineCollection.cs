@@ -1,4 +1,6 @@
-﻿namespace sharpkr1
+﻿using System.Collections.Generic;
+
+namespace sharpkr1
 {
 	delegate TKey KeySelector<TKey>(Magazine mg);
 
@@ -43,16 +45,58 @@
 			}
 		}
 
-        public override string ToString()
+		public double MaxRating { 
+			get
+			{
+				if (_magazines.Count == 0)
+				{
+					return 0; 
+				}
+
+				var target = _magazines.Values
+					.OrderBy(mg => mg.AverageRating)
+					.First();
+
+				return target.AverageRating;
+
+			}
+		}
+
+		public IEnumerable<KeyValuePair<TKey, Magazine>> FrequencyGroup(Frequency value)
+		{
+			return _magazines
+				.Where(mg => mg.Value.Equals(value));
+		}
+
+		public IEnumerable<IGrouping<Frequency, KeyValuePair<TKey, Magazine>>> GroupByFrequency
+		{
+			get
+			{
+				return _magazines
+					.GroupBy(mg => mg.Value.Frequency);
+			}
+		}
+
+		public override string ToString()
         {
-            return base.ToString();
+			string displayString = "=== MagazineCollection ===\n";
+			foreach (var magazine in _magazines)
+			{
+				displayString += magazine.ToString() + "\n";
+			}
+            return displayString;
         }
 
 		public string ToShortString()
 		{
-			return "";
+			string displayString = "=== MagazineCollection ===\n";
+			foreach (var magazine in _magazines)
+			{
+				displayString += magazine.Value.ToShortString() + "\n";
+			}
+			return displayString;
 		}
 
-
+		
 	}
 }
